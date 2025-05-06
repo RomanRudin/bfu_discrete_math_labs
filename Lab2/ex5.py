@@ -1,16 +1,10 @@
 import math
-from typing import Any
 
 def count_shortest_paths(horizontal_steps: int, vertical_steps: int) -> int:
     n = horizontal_steps + vertical_steps
     k = horizontal_steps
     return math.comb(n, k)
 
-
-horizontal_steps = 18
-vertical_steps = 17
-total_paths = count_shortest_paths(horizontal_steps, vertical_steps)
-print(f"Общее количество кратчайших путей: {total_paths}")
 
 def count_restricted_paths(horizontal_steps: int, vertical_steps: int) -> int:
     dp = [[[0, 0] for _ in range(vertical_steps + 1)] for _ in range(horizontal_steps + 1)]
@@ -27,5 +21,10 @@ def count_restricted_paths(horizontal_steps: int, vertical_steps: int) -> int:
     return dp[horizontal_steps][vertical_steps][0] + dp[horizontal_steps][vertical_steps][1]
 
 
-restricted_paths = count_restricted_paths(horizontal_steps, vertical_steps)
-print(f"Количество кратчайших путей с ограничением: {restricted_paths}")
+
+if __name__ == "__main__":
+    horizontal_steps = 18
+    vertical_steps = 17
+
+    print(f"Общее количество кратчайших путей: {count_shortest_paths(horizontal_steps, vertical_steps)}")
+    print(f"Количество кратчайших путей с ограничением: {count_restricted_paths(horizontal_steps, vertical_steps)}")

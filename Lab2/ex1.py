@@ -1,7 +1,5 @@
 from itertools import permutations
 
-word = "ЧЕРЕСПОЛОСИЦА"
-
 def count_unique_words(word: str, length: int) -> int:
     unique_words = set()
     for p in permutations(word, length):
@@ -9,5 +7,7 @@ def count_unique_words(word: str, length: int) -> int:
     return len(unique_words)
 
 
-result = count_unique_words(word, 6)
-print(f"Количество различных 6-буквенных слов: {result}")
+if __name__ == "__main__":
+    word = "ЧЕРЕСПОЛОСИЦА"
+    word_length = 6
+    print(f"Количество различных 6-буквенных слов: {count_unique_words(word, word_length)}")

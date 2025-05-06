@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 from typing import Literal, Mapping
 
 # Проверка двудольности
-def is_bipartite(graph) -> tuple[Literal[True], Mapping] | tuple[Literal[False], None]:
+def is_bipartite(graph: nx.Graph) -> tuple[Literal[True], Mapping] | tuple[Literal[False], None]:
     try:
         color = nx.bipartite.color(graph)
         return True, color
@@ -12,7 +12,7 @@ def is_bipartite(graph) -> tuple[Literal[True], Mapping] | tuple[Literal[False],
 
 
 # Форд-Фалкерсон
-def ford_fulkerson_matching(graph: nx.Graph, left, right) -> list:
+def ford_fulkerson_matching(graph: nx.Graph, left, right) -> list[tuple[int, int]]:
     flow_network = nx.DiGraph()
 
     source = 'source'
@@ -46,7 +46,7 @@ def ford_fulkerson_matching(graph: nx.Graph, left, right) -> list:
 
 
 # Алгоритм Куна
-def kuhn_matching(graph: nx.Graph, left, right) -> list[tuple]:
+def kuhn_matching(graph: nx.Graph, left, right) -> list[tuple[int, int]]:
     pair_U = {u: None for u in left}
     pair_V = {v: None for v in right}
 
@@ -66,7 +66,7 @@ def kuhn_matching(graph: nx.Graph, left, right) -> list[tuple]:
     return matching
 
 
-def visualize_graph(graph: nx.Graph, left, right, matching, title) -> None:
+def visualize_graph(graph: nx.Graph, left, right, matching: list[tuple[int, int]], title: str) -> None:
     plt.figure(figsize=(12, 8))
     pos = {}
     left_nodes = sorted(left)
@@ -91,36 +91,34 @@ def visualize_graph(graph: nx.Graph, left, right, matching, title) -> None:
 
 if __name__ == "__main__":
     edges = [
-        (4, 15), (3, 7), (7, 8), (4, 16), (9, 15), (7, 10), (4, 13),
-        (10, 12), (8, 13), (6, 11), (5, 13), (6, 13), (10, 11),
-        (8, 12), (3, 12), (8, 14), (10, 13), (8, 15), (5, 7), (2, 8),
-        (5, 15), (4, 14), (2, 5), (6, 16), (8, 11), (9, 13), (3, 14),
-        (5, 14), (9, 16), (10, 15), (2, 3), (3, 15), (9, 14),
-        (5, 16), (6, 12)
+        (3, 5), (3, 10), (4, 6), (4, 8), (4, 10), (4, 13),
+        (6, 7), (6, 9), (6, 11), (6, 15), (6, 16), (7, 8),
+        (7, 17), (8, 11), (9, 10), (9, 12), (10, 15), (12, 16),
+        (13, 14), (13, 15), (16, 17)
     ]
 
-    G = nx.Graph()
-    G.add_edges_from(edges)
+    graph = nx.Graph()
+    graph.add_edges_from(edges)
 
 
 
-    bipartite, coloring = is_bipartite(G)
+    bipartite, coloring = is_bipartite(graph)
     print(f"Граф двудольный: {bipartite}")
 
     if not bipartite:
-        cycles = list(nx.cycle_basis(G))
+        cycles = list(nx.cycle_basis(graph))
         edges_to_remove = set()
         for cycle in cycles:
             if len(cycle) % 2 != 0:
                 edges_to_remove.add((cycle[0], cycle[1]))
         print(f"Удаляем рёбра: {edges_to_remove}")
-        G.remove_edges_from(edges_to_remove)
-        bipartite, coloring = is_bipartite(G)
+        graph.remove_edges_from(edges_to_remove)
+        bipartite, coloring = is_bipartite(graph)
         print(f"После удаления рёбер граф двудольный: {bipartite}")
 
     if bipartite:
         left = {node for node in coloring if coloring[node] == 0}
-        right = set(G.nodes()) - left
+        right = set(graph.nodes()) - left
         print(f"Левая доля: {left}")
         print(f"Правая доля: {right}")
     else:
@@ -128,8 +126,8 @@ if __name__ == "__main__":
         exit()
 
 
-    ff_matching = ford_fulkerson_matching(G, left, right)
-    k_matching = kuhn_matching(G, left, right)
+    ff_matching = ford_fulkerson_matching(graph, left, right)
+    k_matching = kuhn_matching(graph, left, right)
 
     print()
     print("Наибольшее паросочетание (Форд-Фалкерсон):")
@@ -141,5 +139,5 @@ if __name__ == "__main__":
     print(k_matching)
     print(f"Размер: {len(k_matching)}")
 
-    visualize_graph(G, left, right, ff_matching, "Наибольшее паросочетание (Форд-Фалкерсон)")
-    visualize_graph(G, left, right, k_matching, "Наибольшее паросочетание (Кун)")
+    visualize_graph(graph, left, right, ff_matching, "Наибольшее паросочетание (Форд-Фалкерсон)")
+    visualize_graph(graph, left, right, k_matching, "Наибольшее паросочетание (Кун)")
