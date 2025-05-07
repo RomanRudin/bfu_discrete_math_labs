@@ -1,18 +1,19 @@
 from xmlrpc.client import MAXINT
 import math
+from typing import Any, Literal
 
 class Node:
-    def __init__(self, key : int, value : str):
+    def __init__(self, key : int, value : str) -> None:
         self.key = key
         self.value = value
         self.left = None
         self.right = None
 
-    def __eq__(self, other):
+    def __eq__(self, other) -> bool:
         return (self.key == other.key and self.value == other.value and self.left == other.left and self.right == other.right)
 
 
-def get_codes_pre_order(node, codes : list, code = ""):
+def get_codes_pre_order(node, codes : list, code = "") -> None:
     if node.left:
         get_codes_pre_order(node.left,codes, code + "0")
     if node.right:
@@ -21,7 +22,7 @@ def get_codes_pre_order(node, codes : list, code = ""):
         codes.append([node.value,code])
 
 
-def haffmancode(symbolchance):
+def haffmancode(symbolchance) -> list:
     nodesarr = list()
     for i in symbolchance:
         nodesarr.append(Node(i[1],i[0]))
@@ -50,17 +51,15 @@ def haffmancode(symbolchance):
     return codes
 
 
-def gettext():
-    file = open("text.txt", "r")
-    text = file.read()
-    file.close()
-
+def gettext(filepath: str) -> str:
+    with open(filepath, "r") as file:
+        text = file.read()
     text = text.lower()
 
     return text
 
 
-def sortbysecond(arr : list):
+def sortbysecond(arr : list) -> list:
     dlist = arr.copy()
     for i in range(len(dlist)-1):
         for j in range(len(dlist)-1-i):
@@ -69,17 +68,17 @@ def sortbysecond(arr : list):
     return dlist
 
 
-def frequency(text : str, a : str):
+def frequency(text : str, a : str) -> int:
     return text.count(a)
 
 
-def encodetext(text : str, codes : list):
+def encodetext(text : str, codes : list) -> str:
     for i in codes:
         text = text.replace(i[0], i[1])
     return text
 
 
-def decodetext(encoded_text : str, codes : list):
+def decodetext(encoded_text : str, codes : list) -> Any | Literal['']:
     decryptedtext = ""
     current_code = ""
 
@@ -94,7 +93,7 @@ def decodetext(encoded_text : str, codes : list):
     return decryptedtext
 
 
-def calculate_shannon_entropy(frequencies,text_len):
+def calculate_shannon_entropy(frequencies,text_len) -> Any | Literal[0]:
 
     entropy = 0
     for freq in frequencies:
@@ -102,7 +101,7 @@ def calculate_shannon_entropy(frequencies,text_len):
     return entropy
 
 
-def lzw_encode(text):
+def lzw_encode(text) -> list:
     # Инициализация словаря всеми возможными символами
     dictionary = {chr(i): i for i in range(256)}
     dict_size = 256
@@ -125,7 +124,7 @@ def lzw_encode(text):
     return encoded_data
 
 
-def lzw_decode(encoded_data):
+def lzw_decode(encoded_data) -> str:
     # Инициализация словаря всеми возможными символами
     dict_size = 256
     dictionary = {i: chr(i) for i in range(dict_size)}
@@ -150,13 +149,13 @@ def lzw_decode(encoded_data):
     return decoded_text
 
 
-def calculate_lzw_length(encoded_data, bits_per_code=12):
+def calculate_lzw_length(encoded_data, bits_per_code=12) -> int:
     # Вычисляем длину закодированного текста в битах
     return len(encoded_data) * bits_per_code
 
 
-def main():
-    text = gettext()
+def main() -> None:
+    text = gettext("Lab4/text.txt")
 
     #1 Статистический анализ
     allsymbols = set(text)
@@ -242,9 +241,7 @@ def main():
     print("Длина словаря Хаффмана для непар:", len(symbolchance),"; Что примерно в битах:",len(symbolchance)*(8+10))
     print("Длина словаря Хаффмана для пар:", len(twoschance)//2,"; Что примерно в битах:",len(twoschance)*(16+10)//2)
 
-def test():
-    ...
+
 
 if __name__ == "__main__":
     main()
-    test()
