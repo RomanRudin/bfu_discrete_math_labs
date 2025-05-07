@@ -174,41 +174,41 @@ def main() -> None:
     symbolchance = sortbysecond(symbolchance)
     twoschance = sortbysecond(twoschance)
 
-    print("\033[32mИсходный текст:\033[0m",text)
+    print("\033[[32m Исходный текст:\033[0m",text)
 
-    print("\033[32mЧастотность символов:\033[0m",symbolchance)
-    print("\033[32mЧастотность пар:\033[0m",twoschance)
-    print("\033[32mРаботаем с отдельными символами:\033[0m")
+    print("\033[[32m Частотность символов:\033[0m",symbolchance)
+    print("\033[[32m Частотность пар:\033[0m",twoschance)
+    print("\033[[32m Работаем с отдельными символами:\033[0m")
     #по символам
     #2.1 Построение кодов Хаффмана
     codes = haffmancode(symbolchance)
-    print("\033[32mКоды Хаффмана:\033[0m",codes)
+    print("\033[[32m Коды Хаффмана:\033[0m",codes)
 
     #2.2 Кодированние текста
     Haffmantext = encodetext(text,codes)
-    print("\033[32mЗакодированный с помощью кодов Хаффмана текст:\033[0m",Haffmantext)
+    print("\033[[32m Закодированный с помощью кодов Хаффмана текст:\033[0m",Haffmantext)
 
-    print("\033[32mДлина текста, закодированного с помощью кодов Хаффмана:\033[0m",len(Haffmantext))
-    print("\033[32mДлина исходного текста, закодированного 5 битными кодами:\033[0m",len(text)*5)
+    print("\033[[32m Длина текста, закодированного с помощью кодов Хаффмана:\033[0m",len(Haffmantext))
+    print("\033[[32m Длина исходного текста, закодированного 5 битными кодами:\033[0m",len(text)*5)
 
     #2.3 Раскодирование текста
     decryptedtext = decodetext(Haffmantext,codes)
-    print("\033[32mРаскодированный текст:\033[0m",decryptedtext)
-    print("\033[32mЕго длина:\033[0m",len(decryptedtext))
+    print("\033[[32m Раскодированный текст:\033[0m",decryptedtext)
+    print("\033[[32m Его длина:\033[0m",len(decryptedtext))
 
-    print("\033[32mРаботаем с парами символов:\033[0m")
+    print("\033[[32m Работаем с парами символов:\033[0m")
     #по парам:
     #3.1 Построение кодов Хаффмана
     twoscodes = haffmancode(twoschance)
     #twoscodes = sortbysecond(twoscodes)
-    print("\033[32mКоды Хаффмана:\033[0m", twoscodes)
+    print("\033[[32m Коды Хаффмана:\033[0m", twoscodes)
 
     #3.2 Кодированние текста
     twosHaffmantext = encodetext(text, twoscodes)
-    print("\033[32mЗакодированный с помощью кодов Хаффмана текст\033[0m:", twosHaffmantext)
+    print("\033[[32m Закодированный с помощью кодов Хаффмана текст\033[0m:", twosHaffmantext)
 
-    print("\033[32mДлина текста, закодированного с помощью кодов Хаффмана:\033[0m", len(twosHaffmantext))
-    print("\033[32mДлина исходного текста, закодированного 5 битными кодами:\033[0m", len(text) * 5)
+    print("\033[[32m Длина текста, закодированного с помощью кодов Хаффмана:\033[0m", len(twosHaffmantext))
+    print("\033[[32m Длина исходного текста, закодированного 5 битными кодами:\033[0m", len(text) * 5)
 
     #3.3 Раскодирование текста
     #twosdecryptedtext = decodetext(twosHaffmantext, twoscodes)
@@ -216,30 +216,30 @@ def main() -> None:
     #print("Его длина:", len(twosdecryptedtext))
 
     #3.4 Вычисление количества информации по формуле Шенона
-    print("\033[32mЭнтропия Шенона\033[0m:", calculate_shannon_entropy(symbolchance, len(text)))
-    print("\033[32mКоличество бит на символ в случае с кодами Хаффмана для непар:\033[0m", len(Haffmantext) / len(text))
-    print("\033[32mКоличество бит на символ в случае с кодами Хаффмана для пар:\033[0m", len(twosHaffmantext) / len(text))
-    print("\033[32mКоличество бит на символ в случае с 5 битовыми кодами: 5")
+    print("\033[[32m Энтропия Шенона\033[0m:", calculate_shannon_entropy(symbolchance, len(text)))
+    print("\033[[32m Количество бит на символ в случае с кодами Хаффмана для непар:\033[0m", len(Haffmantext) / len(text))
+    print("\033[[32m Количество бит на символ в случае с кодами Хаффмана для пар:\033[0m", len(twosHaffmantext) / len(text))
+    print("\033[[32m Количество бит на символ в случае с 5 битовыми кодами: 5")
 
     #4.1 Kодирование текста с помощью LZW
     lzw_encoded_data = lzw_encode(text)
     tmp = ''
     for i in lzw_encoded_data:
         tmp += bin(i)[2:]
-    print("\033[32mЗакодированный с помощью LZW текст:\033[0m", tmp)
+    print("\033[[32m Закодированный с помощью LZW текст:\033[0m", tmp)
 
     #4.2 Раскодирование текста с помощью LZW
     lzw_decoded_text = lzw_decode(lzw_encoded_data)
-    print("\033[32mРаскодированный текст с помощью LZW:\033[0m", lzw_decoded_text)
+    print("\033[[32m Раскодированный текст с помощью LZW:\033[0m", lzw_decoded_text)
 
     lzw_encoded_length = calculate_lzw_length(lzw_encoded_data)
-    print("\033[32mДлина текста, закодированного с помощью LZW (в битах):\033[0m",lzw_encoded_length)
+    print("\033[[32m Длина текста, закодированного с помощью LZW (в битах):\033[0m",lzw_encoded_length)
 
     if text == decryptedtext: print("Исходный текст совпадает с раскодированным\033[0m")
-    else: print("\033[32mИсходный текст не совпадает с раскодированным\033[0m")
+    else: print("\033[[32m Исходный текст не совпадает с раскодированным\033[0m")
 
-    print("\033[32mДлина словаря Хаффмана для непар:\033[0m", len(symbolchance),"; \033[32mЧто примерно в битах:\033[0m",len(symbolchance)*(8+10))
-    print("\033[32mДлина словаря Хаффмана для пар:\033[0m", len(twoschance)//2,"; \033[32mЧто примерно в битах:\033[0m",len(twoschance)*(16+10)//2)
+    print("\033[[32m Длина словаря Хаффмана для непар:\033[0m", len(symbolchance),"; \033[[32m Что примерно в битах:\033[0m",len(symbolchance)*(8+10))
+    print("\033[[32m Длина словаря Хаффмана для пар:\033[0m", len(twoschance)//2,"; \033[[32m Что примерно в битах:\033[0m",len(twoschance)*(16+10)//2)
 
 
 
