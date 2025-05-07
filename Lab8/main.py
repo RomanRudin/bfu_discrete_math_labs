@@ -1,5 +1,6 @@
 import numpy as np
 from collections import deque
+from typing import Any, Literal
 
 
 class Edge:
@@ -33,7 +34,7 @@ class MaxFlow:
                     level[edge.to] = level[v] + 1
                     q.append(edge.to)
 
-    def dfs_flow(self, v, t, upTo, iter_, level):
+    def dfs_flow(self, v, t, upTo, iter_, level) -> Any | Literal[0]:
         if v == t:
             return upTo
         for i in range(iter_[v], len(self.graph[v])):
@@ -47,7 +48,7 @@ class MaxFlow:
             iter_[v] += 1
         return 0
 
-    def max_flow(self, s, t):
+    def max_flow(self, s, t) -> Any | Literal[0]:
         flow = 0
         level = [-1] * self.size
         while True:
