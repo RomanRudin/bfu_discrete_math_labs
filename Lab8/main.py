@@ -61,6 +61,7 @@ class MaxFlow:
                 if f == 0:
                     break
                 flow += f
+                print("current flow: ", flow)
             level = [-1] * self.size
         return flow
 
@@ -92,7 +93,7 @@ def solve_problem(adj_matrix, description) -> None:
             if adj_matrix[i][j] > 0:
                 mf.add_edge(i, j, adj_matrix[i][j])
 
-    max_flow = mf.max_flow(0, N - 1)
+    max_flow = mf.max_flow(0, 2)
     print()
     print(f"Максимальный поток: {max_flow}")
 
