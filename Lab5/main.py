@@ -1,4 +1,5 @@
 import numpy as np
+from typing import Any
 
 
 class CyclicCode:
@@ -13,7 +14,7 @@ class CyclicCode:
         self.codewords = self.generate_all_codewords()
         self.d_min = self.calculate_min_distance()
 
-    def poly_div(self, dividend, divisor) -> np.ndarray[np.Any, np.dtype[np.Any]]:
+    def poly_div(self, dividend, divisor) -> np.ndarray[Any, np.dtype[Any]]:
         dividend = np.array(dividend, dtype=int)
         divisor = np.array(divisor, dtype=int)
         dividend = np.trim_zeros(dividend, 'f')
@@ -30,7 +31,7 @@ class CyclicCode:
         remainder = np.trim_zeros(remainder, 'f')
         return remainder
 
-    def build_systematic_generator_matrix(self) -> np.ndarray[np.Any, np.dtype[np.Any]]:
+    def build_systematic_generator_matrix(self) -> np.ndarray[Any, np.dtype[Any]]:
         I_k = np.eye(self.k, dtype=int)
         C = []
 
@@ -47,7 +48,7 @@ class CyclicCode:
         G = np.hstack([I_k, C])
         return G
 
-    def encode(self, message) -> np.ndarray[np.Any, np.dtype[np.Any]]:
+    def encode(self, message) -> np.ndarray[Any, np.dtype[Any]]:
         if len(message) != self.k:
             raise ValueError(f"Длина сообщения должна быть {self.k} бит")
 
@@ -64,7 +65,7 @@ class CyclicCode:
             codewords.append(codeword)
         return codewords
 
-    def calculate_min_distance(self) -> np.Any:
+    def calculate_min_distance(self) -> Any:
         min_distance = self.n  # Инициализируем максимально возможным значением
 
         for i in range(len(self.codewords)):
@@ -75,12 +76,12 @@ class CyclicCode:
 
         return min_distance
 
-    def decode(self, received) -> tuple[bool, np.ndarray[np.Any, np.dtype[np.Any]]]:
+    def decode(self, received) -> tuple[bool, np.ndarray[Any, np.dtype[Any]]]:
         if len(received) != self.n:
             raise ValueError(f"Длина принятого слова должна быть {self.n} бит")
 
         remainder = self.poly_div(received, self.g)
-        error_detected = np.any(remainder != 0)
+        error_detected = any(remainder != 0)
         return error_detected, remainder
 
     def get_capabilities(self) -> tuple:
@@ -88,7 +89,7 @@ class CyclicCode:
         correct = (self.d_min - 1) // 2
         return detect, correct
 
-    def generate_error_examples(self) -> np.ndarray[np.Any, np.dtype[np.Any]]:
+    def generate_error_examples(self) -> np.ndarray[Any, np.dtype[Any]]:
         message = np.array([1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], dtype=int)
         codeword = self.encode(message)
 
@@ -137,7 +138,7 @@ class CyclicCode:
 
 n = 23  # общее число элементов
 m = 12  # число информационных элементов
-generator_poly = '101011100011'  # порождающий многочлен (12 бит)
+generator_poly = '101011100011'  # порождающий многочлен (12 бит) 
 code = CyclicCode(n, m, generator_poly)
 
 print("1. Порождающая матрица G:")

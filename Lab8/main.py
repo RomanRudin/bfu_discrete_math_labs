@@ -65,7 +65,8 @@ class MaxFlow:
             level = [-1] * self.size
         return flow
 
-    def min_cut(self, s) -> list[bool]:
+    def min_cut(self, s, t) -> list[tuple]:
+        # Находим достижимые вершины из истока в остаточном графе
         visited = [False] * self.size
         q = deque()
         q.append(s)
@@ -76,7 +77,19 @@ class MaxFlow:
                 if edge.capacity > 0 and not visited[edge.to]:
                     visited[edge.to] = True
                     q.append(edge.to)
-        return visited
+
+        # Находим рёбра минимального разреза
+        cut_edges = []
+        for i in range(self.size):
+            if visited[i]:
+                for edge in self.graph[i]:
+                    if not visited[edge.to] and edge.capacity == 0:
+                        if edge.to < len(self.graph) and edge.rev < len(self.graph[edge.to]):
+                            rev_edge = self.graph[edge.to][edge.rev]
+                            if rev_edge.capacity > 0:
+                                cut_edges.append((i, edge.to))
+
+        return cut_edges
 
 
 def solve_problem(adj_matrix, description) -> None:
@@ -93,23 +106,17 @@ def solve_problem(adj_matrix, description) -> None:
             if adj_matrix[i][j] > 0:
                 mf.add_edge(i, j, adj_matrix[i][j])
 
-    max_flow = mf.max_flow(0, 2)
-    print()
-    print(f"Максимальный поток: {max_flow}")
+    source = 0
+    sink = 2
+    max_flow = mf.max_flow(source, sink)
+    print(f"\nМаксимальный поток: {max_flow}")
 
-    # Минимальный разрез
-    visited = mf.min_cut(0)
-    min_cut = []
-    for i in range(N):
-        for edge in mf.graph[i]:
-            if visited[i] and not visited[edge.to] and adj_matrix[i][edge.to] > 0:
-                min_cut.append((i, edge.to, adj_matrix[i][edge.to]))
-
-    print()
-    print("Минимальный разрез проходит через ребра:")
-    for edge in min_cut:
-        print(f"{edge[0]} -> {edge[1]} (capacity: {edge[2]})")
-
+    # Находим минимальный разрез
+    cut_edges = mf.min_cut(source, sink)
+    
+    print("\nМинимальный разрез проходит через ребра:")
+    for i, j in cut_edges:
+        print(f"{i} -> {j} (capacity: {adj_matrix[i][j]})")
 
 
 if __name__ == "__main__":
